@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# This script reads a file line by line, replaces a string in each line, lists the contents of the directory with the same name as each line, and saves the output to a file with the same name as each line in the "output" subdirectory of the directory where the script is run.
+# This script reads a file line by line, replaces a string in each line, lists the contents of the directory with the same name as each line, and saves the output to a file with the same name as each line in the specified output directory.
 
 # Check that the first command-line argument is provided and is a valid file
-if [ $# -eq 0 ]; then
-    echo "Error: no input file specified"
+if [ $# -lt 2 ]; then
+    echo "Error: missing arguments"
+    echo "Usage: $0 input_file output_directory"
     exit 1
 elif [ ! -f "$1" ]; then
     echo "Error: $1 is not a valid file"
@@ -24,20 +25,18 @@ IFS=',' read -r name where_am_i replace_with < "$where_am_i_file"
 where_am_i=${where_am_i#*:}
 echo $where_am_i
 
-
 # Start the loop
 while read line
 do
-
     # Replace the string in the line with the specified replacement
     line2=${line//$where_am_i/$replace_with}
-    # Save the output to a file in the "output" subdirectory of the directory where the script is run
+    # Save the output to a file in the specified output directory
     echo "Listing directory: $line2"
     output_file="$(basename "$line2").txt"
 
-    mkdir -p "$script_dir/output"
+    mkdir -p "$2/$3"
     #put the file directory as a first line
-    echo $line >  "$script_dir/output/$output_file"
-    ls "$line2" >> "$script_dir/output/$output_file"
-    echo "Saved output to file: $script_dir/output/$output_file"
+    echo $line >  "$2/$3/$output_file"
+    ls "$line2" >> "$2/$3/$output_file"
+    echo "Saved output to file: $2/$3/$output_file"
 done < "$1"
