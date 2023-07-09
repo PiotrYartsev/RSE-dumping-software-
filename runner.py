@@ -1,4 +1,6 @@
 import os 
+
 #for each RSE in the list
-for RSE in os.listdir('/path/to/RSEs'):
+for RSE in os.listdir('/home/pioyar/RSE'):
     print(RSE)
+
